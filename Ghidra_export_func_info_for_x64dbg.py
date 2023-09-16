@@ -8,11 +8,21 @@
 import sys
 from time import gmtime, strftime
 
+#get current program name in Ghidra
 programname = currentProgram.getName()
+
+#get current time
 time= strftime("%Y-%m-%d_%H-%M-%S")
 
+#set file path for output
 filename = 'PATH_TO_FILE' + programname + "_" + time + ".txt"
 
+#set loop count variable
+i = 0
+
+print("Exporting functions")
+
+#loop through each function and output address and function name, prefixed with 'lblset' for importing into x64dbg.
 with open(filename, 'a') as file:
     for func in currentProgram.getListing().getFunctions(True):
         funcaddr = str(func.getEntryPoint())
@@ -20,3 +30,8 @@ with open(filename, 'a') as file:
 
         text = str("lblset " + funcaddr + ",\"" + funcname + "\"")
         file.write(text + '\n')
+        i = i + 1
+        
+i = str(i)
+print(i + " functions saved to " + filename)
+
